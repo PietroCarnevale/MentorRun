@@ -16,6 +16,8 @@ struct PhysicsCategory {
     static let player : UInt32 = 0b1
     static let student : UInt32 = 0b10
     
+    // CIAO
+    
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
