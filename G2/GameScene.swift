@@ -46,21 +46,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         physicsWorld.contactDelegate = self
         
-        background1 = SKSpriteNode(imageNamed: "background")
+        background1 = SKSpriteNode(imageNamed: "background_1")
         background1.position = CGPoint(x: 0, y: 0)
         background1.zPosition = -1
         background1.size = CGSize(width: self.frame.size.width, height: self.frame.size.height)
         
         self.addChild(background1)
         
-        background2 = SKSpriteNode(imageNamed: "background")
+        background2 = SKSpriteNode(imageNamed: "background_2")
         background2.position = CGPoint(x: background1.size.width, y: 0)
         background2.zPosition = -1
         background2.size = CGSize(width: self.frame.size.width, height: self.frame.size.height)
         
         self.addChild(background2)
         
-        player = SKSpriteNode(imageNamed: "player")
+        player = SKSpriteNode(imageNamed: "player_1")
         player.name = "player"
         player.position = CGPoint(x: -self.frame.size.width / 2 + 100, y: -self.frame.size.height / 2 + 64)
         player.size = CGSize(width: 64, height: 64)
@@ -70,6 +70,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.physicsBody?.categoryBitMask = PhysicsCategory.player
         player.physicsBody?.contactTestBitMask = PhysicsCategory.student
         player.physicsBody?.collisionBitMask = PhysicsCategory.student
+        
+        let animationAction = SKAction.animate(with: [SKTexture(imageNamed: "player_1"), SKTexture(imageNamed: "player_2"), SKTexture(imageNamed: "player_3"), SKTexture(imageNamed: "player_4"), SKTexture(imageNamed: "player_5"), SKTexture(imageNamed: "player_6"), SKTexture(imageNamed: "player_7"), SKTexture(imageNamed: "player_8"),], timePerFrame: 0.10)
+        let runAction = SKAction.repeatForever(animationAction)
+        player.run(runAction)
         
         self.addChild(player)
         
@@ -85,8 +89,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func startStudentsCycle() {
+        var num: Double = 2.0
+        
         let createStudentAction = SKAction.run(createStudent)
-        let waitAction = SKAction.wait(forDuration: 5.0)
+        let randomNumberAction = SKAction.run {
+            num = Double(Int.random(in: 2...5))
+        }
+        let waitAction = SKAction.wait(forDuration: num)
         
         let createAndWaitAction = SKAction.sequence([createStudentAction, waitAction])
         let studentCycleAction = SKAction.repeatForever(createAndWaitAction)
@@ -152,7 +161,8 @@ extension GameScene {
     }
     
     private func newStudent() {
-        let newStudent = SKSpriteNode(texture: SKTexture(imageNamed: "s1"))
+        let i = Int.random(in: 1...4)
+        let newStudent = SKSpriteNode(texture: SKTexture(imageNamed: "student\(i)_1"))
         newStudent.name = "student"
         newStudent.size = CGSize(width: 48, height: 48)
         newStudent.position = CGPoint(x: self.frame.size.width / 2 + 50, y: -self.frame.size.height / 2 + 60)
@@ -167,11 +177,11 @@ extension GameScene {
         
         addChild(newStudent)
         
-        let animationAction = SKAction.animate(with: [SKTexture(imageNamed: "s1"), SKTexture(imageNamed: "s2")], timePerFrame: 0.25)
-        let moveAction = SKAction.moveBy(x: -self.frame.size.width - 50, y: 0, duration: 3.0)
+        let animationAction = SKAction.animate(with: [SKTexture(imageNamed: "student\(i)_1"), SKTexture(imageNamed: "student\(i)_2"), SKTexture(imageNamed: "student\(i)_3"), SKTexture(imageNamed: "student\(i)_4"), SKTexture(imageNamed: "student\(i)_5"), SKTexture(imageNamed: "student\(i)_6"), SKTexture(imageNamed: "student\(i)_7"), SKTexture(imageNamed: "student\(i)_8"),], timePerFrame: 0.10)
+        let moveAction = SKAction.moveBy(x: -self.frame.size.width - 50, y: 0, duration: 3.2)
         let removeAction = SKAction.removeFromParent()
         
-        let animationSequence = SKAction.repeat(animationAction, count: 6)
+        let animationSequence = SKAction.repeat(animationAction, count: 4)
         
         // Use group to run animation and movement simultaneously
         let groupAction = SKAction.group([animationSequence, moveAction])
